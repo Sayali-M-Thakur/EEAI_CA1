@@ -1,46 +1,26 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
-from Config import Config
+from Config import *
 import random
 seed =0
 random.seed(seed)
 np.random.seed(seed)
 
 class Data():
-    def __init__(self, X: np.ndarray, df: pd.DataFrame) -> None:
-        self.X = X
-        self.y = []  # List to store multiple target variables
+    def __init__(self,
+                 X: np.ndarray,
+                 df: pd.DataFrame) -> None:
 
-        for col in Config.TYPE_COLS:
-            y = df[col].to_numpy()
-            y_series = pd.Series(y)
-            good_y_value = y_series.value_counts()[y_series.value_counts() >= 3].index
+        y = df.y.to_numpy()
+        y_series = pd.Series(y)
 
-            if len(good_y_value) < 1:
-                print(f"None of the class in '{col}' have more than 3 records: Skipping ...")
-                continue
+        good_y_value = y_series.value_counts()[y_series.value_counts() >= 3].index
 
-        self.y.append(y[y_series.isin(good_y_value)])
-
-        # Check if any target variables have data
-        if not self.y:
-            print("No target variables have sufficient data. Exiting...")
+        if len(good_y_value)<1:
+            print("None of the class have more than 3 records: Skipping ...")
+            self.X_train = None
             return
-    # def __init__(self,
-    #     #          X: np.ndarray,
-    #     #          df: pd.DataFrame) -> None:
-    #     #
-    #     # y = df.y.to_numpy()
-    #     # y_series = pd.Series(y)
-    #     #
-    #     # good_y_value = y_series.value_counts()[y_series.value_counts() >= 3].index
-    #     #
-    #     # if len(good_y_value)<1:
-    #     #     print("None of the class have more than 3 records: Skipping ...")
-    #     #     self.X_train = None
-    #     #     return
 
         y_good = y[y_series.isin(good_y_value)]
         X_good = X[y_series.isin(good_y_value)]

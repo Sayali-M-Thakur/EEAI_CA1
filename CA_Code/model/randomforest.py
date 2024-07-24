@@ -5,7 +5,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 from numpy import *
 import random
-from Config import Config
 num_folds = 0
 seed =0
 # Data
